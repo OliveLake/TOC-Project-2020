@@ -1,6 +1,6 @@
 import os
 import sys
-ipmort gspread #access googlesheet
+#import gspread  # access googlesheet
 
 from flask import Flask, jsonify, request, abort, send_file
 from dotenv import load_dotenv
@@ -14,7 +14,7 @@ from utils import send_text_message
 load_dotenv()
 
 
-machine = TocMachine( #TODO
+machine = TocMachine(  # TODO
     states=["user", "state1", "state2"],
     transitions=[
         {
@@ -94,19 +94,25 @@ def webhook_handler():
         abort(400)
 
     # if event is MessageEvent and message is TextMessage, then echo text
-    #TODO
-	for event in events:
+    # TODO
+    for event in events:
         if not isinstance(event, MessageEvent):
             continue
         if not isinstance(event.message, TextMessage):
             continue
-        if not isinstance(event.message.text, str):
+        """
+	if not isinstance(event.message.text, str):
             continue
         print(f"\nFSM STATE: {machine.state}")
         print(f"REQUEST BODY: \n{body}")
         response = machine.advance(event)
         if response == False:
             send_text_message(event.reply_token, "Not Entering any State")
+	"""
+        # MyAdd(huang)
+    line_bot_api.reply_message(
+	event.reply_token, TextSendMessage(text=event.message.text)
+    )
 
     return "OK"
 
