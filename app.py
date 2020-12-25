@@ -76,7 +76,7 @@ def callback():
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(text=event.message.text)
         )
-
+    print("callback.")
     return "OK"
 
 
@@ -125,5 +125,6 @@ def show_fsm():
 
 if __name__ == "__main__":
     port = os.environ['PORT']
+    print(port)
     #port = os.environ.get("PORT", 8000)
     app.run(host="0.0.0.0", port=port, debug=True, reloader=True)
