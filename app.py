@@ -1,5 +1,6 @@
 import os
 import sys
+ipmort gspread #access googlesheet
 
 from flask import Flask, jsonify, request, abort, send_file
 from dotenv import load_dotenv
@@ -13,7 +14,7 @@ from utils import send_text_message
 load_dotenv()
 
 
-machine = TocMachine(
+machine = TocMachine( #TODO
     states=["user", "state1", "state2"],
     transitions=[
         {
@@ -93,7 +94,8 @@ def webhook_handler():
         abort(400)
 
     # if event is MessageEvent and message is TextMessage, then echo text
-    for event in events:
+    #TODO
+	for event in events:
         if not isinstance(event, MessageEvent):
             continue
         if not isinstance(event.message, TextMessage):
