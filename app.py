@@ -100,19 +100,16 @@ def webhook_handler():
             continue
         if not isinstance(event.message, TextMessage):
             continue
-        """
-	if not isinstance(event.message.text, str):
+        if not isinstance(event.message, str):
             continue
+	#if not isinstance(event.message.text, str):
+            #continue
         print(f"\nFSM STATE: {machine.state}")
         print(f"REQUEST BODY: \n{body}")
         response = machine.advance(event)
         if response == False:
             send_text_message(event.reply_token, "Not Entering any State")
-	"""
-        
-    line_bot_api.reply_message(
-	event.reply_token, TextSendMessage(text=event.message.text)
-    )
+	
 
     return "OK"
 
@@ -124,7 +121,5 @@ def show_fsm():
 
 
 if __name__ == "__main__":
-    port = os.environ['PORT']
-    print(port)
-    #port = os.environ.get("PORT", 8000)
-    app.run(host="0.0.0.0", port=port, debug=True, reloader=True)
+    port = os.environ.get("PORT", 8000)
+    app.run(host="127.0.0.1", port=port, debug=True)
