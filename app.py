@@ -95,15 +95,15 @@ def webhook_handler():
 
     # if event is MessageEvent and message is TextMessage, then echo text
     for event in events:
-#        if not isinstance(event, MessageEvent):
-#            continue
-#        if not isinstance(event.message, TextMessage):
-#            continue
-#        if not isinstance(event.message, str):
-#            continue   
+ #       if not isinstance(event, MessageEvent):
+ #           continue
+ #       if not isinstance(event.message, TextMessage):
+ #           continue
+ #       if not isinstance(event.message, str):
+ #           continue   
+
         if event.message.text == "薩爾達料理" :
-            #send_text_message(event.reply_token,text =  "成功！！")
-            reply_text = "抓"
+            send_text_message(event.reply_token,text =  "抓")
             machine.helper(event)
         else:
             if machine.state == "helper" :
@@ -112,8 +112,8 @@ def webhook_handler():
             else:
                 machine.go(event)
         
-        print(f"\nFSM STATE: {machine.state}\n")
-        print(f"REQUEST BODY: \n{body}\n")
+        print(f"\n\nFSM STATE: {machine.state}\n")
+#        print(f"REQUEST BODY: \n{body}\n")
         response = machine.advance(event)
         if response == False:
             send_text_message(event.reply_token, "Not Entering any State")

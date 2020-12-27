@@ -37,7 +37,7 @@ class TocMachine(GraphMachine):
             alt_text='請用手機看此訊息！', template=buttons_template)
         line_bot_api.reply_message(event.reply_token, template_message)
         print("I'm entering helper")
-
+        send_text_message(event.reply_token,text = f"成功")
 
 '''
         print("enter helper")
