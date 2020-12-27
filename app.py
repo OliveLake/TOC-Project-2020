@@ -14,22 +14,22 @@ from utils import send_text_message
 load_dotenv()
 
 
-machine = TocMachine(  # TODO
-    states=["user", "state1", "state2"],
+machine = TocMachine(  
+    states=["user", "helper", "ingredient", "effect", "name"],
     transitions=[
         {
             "trigger": "advance",
             "source": "user",
-            "dest": "state1",
-            "conditions": "is_going_to_state1",
+            "dest": "helper",
+            "conditions": "is_going_to_helper",
         },
         {
             "trigger": "advance",
-            "source": "user",
-            "dest": "state2",
-            "conditions": "is_going_to_state2",
+            "source": "helper",
+            "dest": "ingredient",
+            "conditions": "is_going_to_ingredient",
         },
-        {"trigger": "go_back", "source": ["state1", "state2"], "dest": "user"},
+        {"trigger": "go_back", "source": ["ingredient", "effect", "name"], "dest": "user"},
     ],
     initial="user",
     auto_transitions=False,
@@ -76,7 +76,7 @@ def callback():
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(text=event.message.text)
         )
-    print("callback.")
+    
     return "OK"
 
 
@@ -85,7 +85,7 @@ def webhook_handler():
     signature = request.headers["X-Line-Signature"]
     # get request body as text
     body = request.get_data(as_text=True)
-    app.logger.info(f"Request body: {body}")
+    app.logger.info(f"\nRequest body: {body}\n")
 
     # parse webhook body
     try:
@@ -94,18 +94,26 @@ def webhook_handler():
         abort(400)
 
     # if event is MessageEvent and message is TextMessage, then echo text
-    # TODO
     for event in events:
-        if not isinstance(event, MessageEvent):
+        '''if not isinstance(event, MessageEvent):
             continue
         if not isinstance(event.message, TextMessage):
             continue
         if not isinstance(event.message, str):
-            continue
-	#if not isinstance(event.message.text, str):
-            #continue
-        print(f"\nFSM STATE: {machine.state}")
-        print(f"REQUEST BODY: \n{body}")
+            continue'''    
+        if event.message.text == "薩爾達料理" :
+            #send_text_message(event.reply_token,text =  "成功！！")
+            reply_text = "抓"
+            machine.helper(event)
+        else:
+            if machine.state == "helper" :
+                machine.advance(event)
+                continue
+            else:
+                machine.go(event)
+        
+        print(f"\nFSM STATE: {machine.state}\n")
+        print(f"REQUEST BODY: \n{body}\n")
         response = machine.advance(event)
         if response == False:
             send_text_message(event.reply_token, "Not Entering any State")
